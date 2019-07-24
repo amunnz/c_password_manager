@@ -18,11 +18,13 @@ int main(void) {
     std::string string_key = "master_password";
     CD cryptographic_data = CD(string_key, message);
 
-    CryptoPP::byte ciphertext[message.length()]; // Stores encrypted data
+    byte ciphertext[message.length()]; // Stores encrypted data
 
     cryptographic_data.encrypt(); // Encrypt
 
-    // CryptoPP::byte decrypted_data[message.length()]; // Stores decrytped data
+    cryptographic_data.writeToFile();
+    cryptographic_data.readFile();
+    // byte decrypted_data[message.length()]; // Stores decrytped data
 
     // cryptographic_data.decrypt(decrypted_data, ciphertext); // Decrypt
     cryptographic_data.decrypt();
