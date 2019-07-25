@@ -1,10 +1,5 @@
 #include "password_manager.h"
 
-
-
-
-
-
 int main(void) {
     std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 
@@ -18,17 +13,13 @@ int main(void) {
     std::string string_key = "master_password";
     CD cryptographic_data = CD(string_key, message);
 
-    byte ciphertext[message.length()]; // Stores encrypted data
-
     cryptographic_data.encrypt(); // Encrypt
 
-    cryptographic_data.writeToFile();
-    cryptographic_data.readFile();
-    // byte decrypted_data[message.length()]; // Stores decrytped data
-
-    // cryptographic_data.decrypt(decrypted_data, ciphertext); // Decrypt
+    //cryptographic_data.writeToFile();
+    //cryptographic_data.readFile();
+        
     cryptographic_data.decrypt();
     
-    // std::cout << "Decrypted data: " << decrypted_data << std::endl;
+    
     return 0;
 }
