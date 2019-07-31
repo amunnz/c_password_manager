@@ -1,6 +1,6 @@
 # when main.o changes, run the following command to produce "run"
 run: main.o
-	g++ main.o -o run -lcryptopp
+	g++ -g main.o -o run -lcryptopp
 
 # when main.cpp and/or password_manager.h change, run the following
 # command to produce "main.o" -c flag simply compiles into an object file

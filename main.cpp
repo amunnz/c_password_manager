@@ -5,6 +5,7 @@ int main(void) {
 
     std::string message = "Title,Username,Password\nFacebook,email@address.com,myfbpassword";
 
+
     // The Cryptographic data object shouldn't be initialised/declared until we have
     // some kind of data ready to write to file in case 1)
     // In case 2), it will be initialised immediately after receiving user input for the password
