@@ -23,7 +23,7 @@ class CD {
     public:
     SecByteBlock key;
     SecByteBlock iv;
-    const byte* plaintext;
+    SecByteBlock plaintext;
 
     SecByteBlock generate_initialisation_vector() {
         AutoSeededRandomPool rnd;
@@ -48,7 +48,7 @@ class CD {
     CD (byte* str) {
         iv = generate_initialisation_vector();
         key = generate_secure_key();
-        plaintext = str;
+        plaintext = SecByteBlock(str, 63);
     }
     
     // Constructor for case where file is present
@@ -75,9 +75,10 @@ class CD {
         
         SecByteBlock data_buf(queue.MaxRetrievable());
         ArraySink sink(data_buf, data_buf.size());
-        queue.TransferTo(sink);
+        int bytes_transferred = queue.TransferTo(sink);
 
-        plaintext = data_buf; // Set plaintext
+        plaintext = SecByteBlock(data_buf, bytes_transferred); // Set plaintext
+        std::cout << "The decrypted file data reads: " << plaintext.data() << std::endl;
     }
 
     void encrypt_and_write_to_file() {
@@ -91,8 +92,8 @@ class CD {
                              true, 
                              new Redirector(output_file)); // Stream the bytes held by iv into the file sink
         
-        ArraySource write_data(plaintext,
-                               std::strlen((char*)plaintext), 
+        ArraySource write_data(plaintext.data(),
+                               plaintext.size(), 
                                true, 
                                new StreamTransformationFilter(encryptor, new Redirector(output_file)));
     }
@@ -100,6 +101,7 @@ class CD {
 
 void print_byte_array_as_decimal(const unsigned char* str) {
         const int length = strlen((char*)str);
+        
         std::cout << "[  ";
         for (int i = 0; i < length; i++) {
             std::cout << (int)str[i] << "  ";
