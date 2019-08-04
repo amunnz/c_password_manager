@@ -4,6 +4,7 @@
 #include "cryptopp/modes.h"
 #include "cryptopp/aes.h"
 #include "cryptopp/osrng.h"
+#include "cryptopp/files.h"
 
 using namespace CryptoPP;
 
@@ -19,11 +20,10 @@ class Entry {
 // iv is formed by either 1) generating randomly or 2) reading from end of file
 // key is formed by user input of a string
 class CD {
-    private:
+    public:
     SecByteBlock key;
     SecByteBlock iv;
-    byte* plaintext;
-    byte* ciphertext;
+    const byte* plaintext;
 
     SecByteBlock generate_initialisation_vector() {
         AutoSeededRandomPool rnd;
@@ -33,82 +33,69 @@ class CD {
         return iv;
     }
 
-    SecByteBlock generate_secure_key(std::string string_key) {
-
-        // The key is too long
-        if (string_key.length() > AES::BLOCKSIZE) {
-            std::cout << "The key is too long. Please enter a key with maximum " << AES::BLOCKSIZE << " characters." << std::endl;
-            std::cout << "Aborting..." << std::endl;
-            exit(1);
-        // The key is too short and must be padded with zeroes
-        } else if (string_key.length() < AES::BLOCKSIZE) {
-            string_key.append(AES::BLOCKSIZE - string_key.length(), '0');
-        }
-        
+    SecByteBlock generate_secure_key() {
+      
+        byte* key_buffer = (byte*)"masterpassword0";
+        //std::cout << "Please enter your master password: ";
+        //std::cin.getline((char*)key_buffer, AES::BLOCKSIZE); // This will ignore anything longer
+      
         // The key has the correct length and can be initialised
-        SecByteBlock key((const byte*)string_key.data(), string_key.size());
+        SecByteBlock key(key_buffer, AES::DEFAULT_KEYLENGTH);
         return key;
     }   
 
-    // Constructor for use when the initialisation vector must be generated (new database)
-    public:
-    CD (std::string string_key, std::string str) {
+    // Constructor for case where no file is present
+    CD (byte* str) {
         iv = generate_initialisation_vector();
-        key = generate_secure_key(string_key);
-        plaintext = (byte*)str.data();
-        ciphertext = nullptr;
+        key = generate_secure_key();
+        plaintext = str;
     }
+    
+    // Constructor for case where file is present
+    CD () {
+        key = generate_secure_key(); // Set key
 
-    void encrypt() {
-        size_t message_length = std::strlen((char *) plaintext);
+        FileSource fs("database", false /* Do not pump all pumps immediately*/);
 
-        byte buffer[1000];
-                
-        CFB_Mode<AES>::Encryption encryptor(key, key.size(), iv);
-        encryptor.ProcessData(buffer, plaintext, message_length);
+        SecByteBlock iv_buf(AES::BLOCKSIZE); // Set up a buffer to store the IV read from file
+        ArraySink as(iv_buf, iv_buf.size()); // An ArraySink will handle writing data to iv_buf
+        fs.Attach(new Redirector(as));       // Attaches the file object to our ArraySink
+        fs.Pump(AES::BLOCKSIZE);             // Extract the first 16 bytes for the IV
+        iv = iv_buf;                         // Set iv
 
-        // Repoint ciphertext to the data held in buffer
-        ciphertext = buffer;
-    }
-
-    void decrypt() {
-        // We don't know how big the database is, so give it plenty of space:
-        size_t message_length = 1000;
-
-        byte buffer[1000];
         
-        CFB_Mode<AES>::Decryption decryptor(key, key.size(), iv);       
-        decryptor.ProcessData(buffer, ciphertext, message_length);
+        // decryptor is of type StreamTransformationFilter
+        CFB_Mode<AES>::Decryption decryptor(key, key.size(), iv);
+        ByteQueue queue;
+        
+        // Detach deletes the current attachment, meaning it frees the memory
+        // associated with the "as" ArraySink above.
+        fs.Detach(new StreamTransformationFilter(decryptor, new Redirector(queue)));
+        fs.PumpAll(); // Pump the remaining bytes from the file through the decryptor and into the queue.
+        
+        SecByteBlock data_buf(queue.MaxRetrievable());
+        ArraySink sink(data_buf, data_buf.size());
+        queue.TransferTo(sink);
 
-        std::cout << "Decrypted data: " << buffer << std::endl;
+        plaintext = data_buf; // Set plaintext
     }
 
-    // void writeToFile() {
-    //     //To Do
-    //     //  -Add IV vector to the end of the data string
-    //     std::ofstream fs("./key.bin", std::ios::binary);
-    //     std::cout << sizeof(data) << std::endl;
-    //     std::string s((char*)data,sizeof(data));
-    //     std::cout <<"running write to file" << std::endl;
-    //     std::cout <<"Initial String: " << s << std::endl;
+    void encrypt_and_write_to_file() {
 
-    //     std::string iv_string((char*)(byte*)iv, sizeof(iv));
-    //     s.append(iv_string);
-    //     std::cout <<"Appended String: " << s << std::endl;
+        CFB_Mode<AES>::Encryption encryptor(key, key.size(), iv);
 
-    //     fs.write((char*)s.data(), s.size());
-    // }
-
-    // void readFile() {
-    //     //To Do
-    //     //  -Splt IV vector of the end of the data string
-    //     print_byte_array_as_decimal(data);
-    //     std::ifstream fs("./key.bin", std::ios::binary);
-    //     //byte* data2;
-    //     fs.read((char*)data, 100);
-    //     print_byte_array_as_decimal(data);
-
-    // }
+        FileSink output_file("database", true);
+        
+        ArraySource write_iv(iv, 
+                             iv.size(), 
+                             true, 
+                             new Redirector(output_file)); // Stream the bytes held by iv into the file sink
+        
+        ArraySource write_data(plaintext,
+                               std::strlen((char*)plaintext), 
+                               true, 
+                               new StreamTransformationFilter(encryptor, new Redirector(output_file)));
+    }
 };
 
 void print_byte_array_as_decimal(const unsigned char* str) {

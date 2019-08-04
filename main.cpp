@@ -1,26 +1,17 @@
 #include "password_manager.h"
 
-int main(void) {
+int main(int argc, char** argv) {
+    
     std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 
-    std::string message = "Title,Username,Password\nFacebook,email@address.com,myfbpassword";
+    //byte* message = (byte*)"Title,Username,Password\nFacebook,email@address.com,myfbpassword";
 
+    // Assume there is a file to open with a iv and encrypted data
+    CD cryptographic_data = CD();
 
-    // The Cryptographic data object shouldn't be initialised/declared until we have
-    // some kind of data ready to write to file in case 1)
-    // In case 2), it will be initialised immediately after receiving user input for the password
-    // To initialise it, we need a string holding the master password, optionally the IV read
-    // from file in case 2), and either the encrypted data or plain text.
-    std::string string_key = "master_password";
-    CD cryptographic_data = CD(string_key, message);
-
-    cryptographic_data.encrypt(); // Encrypt
-
-    //cryptographic_data.writeToFile();
-    //cryptographic_data.readFile();
-        
-    cryptographic_data.decrypt();
-    
+    // This should be done as late as possible.
+    //CD cryptographic_data = CD(message);
+    //cryptographic_data.encrypt_and_write_to_file();      
     
     return 0;
 }
