@@ -1,21 +1,14 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
+#ifndef CRYPTOG_H
+#define CRYPTOG_H
+
 #include "cryptopp/modes.h"
 #include "cryptopp/aes.h"
 #include "cryptopp/osrng.h"
 #include "cryptopp/files.h"
 
+#include "utils.h"
+
 using namespace CryptoPP;
-
-void print_byte_array_as_decimal(const unsigned char* str);
-
-class Entry {
-    std::string title;
-    std::string username;
-    std::string password;
-};
-
 
 // iv is formed by either 1) generating randomly or 2) reading from end of file
 // key is formed by user input of a string
@@ -79,6 +72,8 @@ class CD {
 
         plaintext = SecByteBlock(data_buf, bytes_transferred); // Set plaintext
         std::cout << "The decrypted file data reads: " << plaintext.data() << std::endl;
+
+        print_byte_array_as_decimal(plaintext.data());
     }
 
     void encrypt_and_write_to_file() {
@@ -99,12 +94,4 @@ class CD {
     }
 };
 
-void print_byte_array_as_decimal(const unsigned char* str) {
-        const int length = strlen((char*)str);
-        
-        std::cout << "[  ";
-        for (int i = 0; i < length; i++) {
-            std::cout << (int)str[i] << "  ";
-        }
-        std::cout << "]" << std::endl;
-}
+#endif
