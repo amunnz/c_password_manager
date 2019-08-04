@@ -1,4 +1,7 @@
 main.o
+utils.o
+cryptog.o
+entry.o
 run
 .vscode
 Makefile
