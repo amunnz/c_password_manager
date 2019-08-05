@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
 
-    byte* message = (byte*)"Title,Username,Password\nFacebook,email@address.com,myfbpassword";
+    const std::string message = "Title,Username,Password\nFacebook,email@address.com,myfbpassword";
 
     // Initialise a pointer to our object. If no file is provided, point to 0x0, otherwise allocate
     // a new CryptoG object on the heap and point to it.
@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 
     // If cryptographic_data hasn't been initialised away from NULLPTR, initialise it
     if (!cryptographic_data) {
-        cryptographic_data = new CryptoG(message);
+        cryptographic_data = new CryptoG(message, message.length());
     }
     cryptographic_data->encrypt_and_write_to_file();
          
