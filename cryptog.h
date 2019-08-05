@@ -18,7 +18,6 @@ class CryptoG {
     SecByteBlock plaintext;
 
     SecByteBlock generate_initialisation_vector();
-    
     SecByteBlock generate_secure_key();
 
     public:

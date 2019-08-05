@@ -37,7 +37,6 @@ CryptoG::CryptoG () {
     fs.Attach(new Redirector(as));       // Attaches the file object to our ArraySink
     fs.Pump(AES::BLOCKSIZE);             // Extract the first 16 bytes for the IV
     iv = iv_buf;                         // Set iv
-
     
     // decryptor is of type StreamTransformationFilter
     CFB_Mode<AES>::Decryption decryptor(key, key.size(), iv);
@@ -54,8 +53,6 @@ CryptoG::CryptoG () {
 
     plaintext = SecByteBlock(data_buf, bytes_transferred); // Set plaintext
     std::cout << "The decrypted file data reads: " << plaintext.data() << std::endl;
-
-    print_byte_array_as_decimal(plaintext.data());
 }
 
 void CryptoG::encrypt_and_write_to_file() {
@@ -64,12 +61,12 @@ void CryptoG::encrypt_and_write_to_file() {
 
     FileSink output_file("database", true);
     
-    ArraySource write_iv(iv, 
+    ArraySource write_iv(   iv, 
                             iv.size(), 
                             true, 
                             new Redirector(output_file)); // Stream the bytes held by iv into the file sink
     
-    ArraySource write_data(plaintext.data(),
+    ArraySource write_data( plaintext.data(),
                             plaintext.size(), 
                             true, 
                             new StreamTransformationFilter(encryptor, new Redirector(output_file)));
