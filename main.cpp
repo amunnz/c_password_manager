@@ -1,17 +1,23 @@
 #include "cryptog.h"
+#include "ui.h"
 
 int main(int argc, char** argv) {
-    
-    std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 
     byte* message = (byte*)"Title,Username,Password\nFacebook,email@address.com,myfbpassword";
 
-    // Assume there is a file to open with a iv and encrypted data
-    //CD cryptographic_data = CD();
+    // Initialise a pointer to our object. If no file is provided, point to 0x0, otherwise allocate
+    // a new CryptoG object on the heap and point to it.
+    CryptoG* cryptographic_data = (argc == 1) ? nullptr : new CryptoG();
 
-    // This should be done as late as possible.
-    CryptoG cryptographic_data = CryptoG(message);
-    cryptographic_data.encrypt_and_write_to_file();      
+    // Do database stuff...
+    UI::print_home_screen();
+
+    // If cryptographic_data hasn't been initialised away from NULLPTR, initialise it
+    if (!cryptographic_data) {
+        cryptographic_data = new CryptoG(message);
+    }
+    cryptographic_data->encrypt_and_write_to_file();
+         
     
     return 0;
 }
