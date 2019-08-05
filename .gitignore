@@ -4,7 +4,6 @@ cryptog.o
 entry.o
 run
 .vscode
-Makefile
 Makefile~
 key.bin
 database
