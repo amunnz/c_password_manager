@@ -10,26 +10,30 @@ SecByteBlock CryptoG::generate_initialisation_vector() {
 
 SecByteBlock CryptoG::generate_secure_key() {
     
-    byte* key_buffer = (byte*)"masterpassword0";
-    //std::cout << "Please enter your master password: ";
-    //std::cin.getline((char*)key_buffer, AES::BLOCKSIZE); // This will ignore anything longer
+    byte key_buffer[AES::MAX_KEYLENGTH] = { 0 };
+    std::cout << "Please enter your master password: ";
+
+    // getline makes the last char within the bounds of length
+    // the null terminator, so in practice any byte after the
+    // 31st is ignored.
+    std::cin.getline((char*)key_buffer, AES::MAX_KEYLENGTH); 
     
     // The key has the correct length and can be initialised
-    SecByteBlock key(key_buffer, AES::DEFAULT_KEYLENGTH);
+    SecByteBlock key(key_buffer, AES::MAX_KEYLENGTH);
     return key;
 }   
 
 // Constructor for case where no file is present
-CryptoG::CryptoG (const std::string& str, const size_t length) {
+CryptoG::CryptoG (const std::string& str, const size_t length) : key(generate_secure_key())
+{
     iv = CryptoG::generate_initialisation_vector();
-    key = CryptoG::generate_secure_key();
     plaintext = SecByteBlock((byte*)str.data(), length);
-    print_byte_array_as_decimal((byte*)str.data(), length);
 }
 
 // Constructor for case where file is present
-CryptoG::CryptoG () {
-    key = generate_secure_key(); // Set key
+CryptoG::CryptoG () : key ( generate_secure_key() )
+{
+    //key = generate_secure_key(); // Set key
 
     FileSource fs("database", false /* Do not pump all pumps immediately*/);
 
