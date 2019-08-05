@@ -16,8 +16,8 @@ int main(int argc, char** argv) {
     if (!cryptographic_data) {
         cryptographic_data = new CryptoG(message, message.length());
     }
-    cryptographic_data->encrypt_and_write_to_file();
-         
-    
+    cryptographic_data->encrypt_and_write_to_file();     
+    delete cryptographic_data;
+
     return 0;
 }
