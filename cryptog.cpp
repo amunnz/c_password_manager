@@ -44,8 +44,7 @@ void CryptoG::read_and_decrypt_file() {
     CFB_Mode<AES>::Decryption decryptor(key, key.size(), iv);
     ByteQueue queue;
     
-    // Detach deletes the current attachment, meaning it frees the memory
-    // associated with the "as" ArraySink above.
+    // Detach old transformation and attach new one.
     fs.Detach(new StreamTransformationFilter(decryptor, new Redirector(queue)));
     fs.PumpAll(); // Pump the remaining bytes from the file through the decryptor and into the queue.
     
@@ -66,7 +65,7 @@ void CryptoG::encrypt_and_write_to_file() {
     ArraySource(iv, 
                 iv.size(), 
                 true, 
-                new Redirector(output_file)); // Stream the bytes held by iv into the file sink
+                new Redirector(output_file));
     
     ArraySource(plaintext.data(),
                 plaintext.size(), 
