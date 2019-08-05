@@ -20,10 +20,11 @@ class CryptoG {
     SecByteBlock generate_initialisation_vector();
     SecByteBlock generate_secure_key();
 
+    void read_and_decrypt_file();
+    
     public:
     
     CryptoG(const std::string& str, const size_t length); // Constructor for case where no file is present
-    
     CryptoG(); // Constructor for case where file is present
 
     void encrypt_and_write_to_file();
