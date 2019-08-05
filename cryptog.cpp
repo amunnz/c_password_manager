@@ -24,18 +24,19 @@ SecByteBlock CryptoG::generate_secure_key() {
 }   
 
 // Constructor for case where no file is present
-CryptoG::CryptoG (const std::string& str, const size_t length) : key(generate_secure_key())
-{
-    iv = CryptoG::generate_initialisation_vector();
-    plaintext = SecByteBlock((byte*)str.data(), length);
-}
+CryptoG::CryptoG (const std::string& str, const size_t length)
+    : key(generate_secure_key()),
+      iv(CryptoG::generate_initialisation_vector()),
+      plaintext(SecByteBlock((byte*)str.data(), length)) {}
+
 
 // Constructor for case where file is present
-CryptoG::CryptoG () : key ( generate_secure_key() )
-{
-    //key = generate_secure_key(); // Set key
+CryptoG::CryptoG () : key(generate_secure_key()) {
+    read_and_decrypt_file();
+}
 
-    FileSource fs("database", false /* Do not pump all pumps immediately*/);
+void CryptoG::read_and_decrypt_file() {
+    FileSource fs("database", false /* Do not pump all bytes immediately*/);
 
     SecByteBlock iv_buf(AES::BLOCKSIZE); // Set up a buffer to store the IV read from file
     ArraySink as(iv_buf, iv_buf.size()); // An ArraySink will handle writing data to iv_buf
@@ -43,7 +44,6 @@ CryptoG::CryptoG () : key ( generate_secure_key() )
     fs.Pump(AES::BLOCKSIZE);             // Extract the first 16 bytes for the IV
     iv = iv_buf;                         // Set iv
     
-    // decryptor is of type StreamTransformationFilter
     CFB_Mode<AES>::Decryption decryptor(key, key.size(), iv);
     ByteQueue queue;
     
@@ -52,12 +52,12 @@ CryptoG::CryptoG () : key ( generate_secure_key() )
     fs.Detach(new StreamTransformationFilter(decryptor, new Redirector(queue)));
     fs.PumpAll(); // Pump the remaining bytes from the file through the decryptor and into the queue.
     
-    SecByteBlock data_buf(queue.MaxRetrievable());
+    SecByteBlock data_buf(queue.MaxRetrievable()); // Allocate buffer to fit exactly the number of bytes to be transferred.
     ArraySink sink(data_buf, data_buf.size());
     int bytes_transferred = queue.TransferTo(sink);
 
     plaintext = SecByteBlock(data_buf, bytes_transferred); // Set plaintext
-    std::cout << "The decrypted file data reads: " << plaintext.data() << std::endl;
+    std::cout << "The decrypted file data reads:" << std::endl << plaintext.data() << std::endl;
 }
 
 void CryptoG::encrypt_and_write_to_file() {
