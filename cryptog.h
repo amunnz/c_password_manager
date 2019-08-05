@@ -22,7 +22,7 @@ class CryptoG {
 
     public:
     
-    CryptoG (byte* str); // Constructor for case where no file is present
+    CryptoG (const std::string& str, const size_t length); // Constructor for case where no file is present
     
     CryptoG (); // Constructor for case where file is present
 
