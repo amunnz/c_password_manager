@@ -13,7 +13,7 @@ using namespace CryptoPP;
 // key is formed by user input of a string
 class CryptoG {
     private:
-    SecByteBlock key;
+    const SecByteBlock key;
     SecByteBlock iv;
     SecByteBlock plaintext;
 
@@ -22,9 +22,9 @@ class CryptoG {
 
     public:
     
-    CryptoG (const std::string& str, const size_t length); // Constructor for case where no file is present
+    CryptoG(const std::string& str, const size_t length); // Constructor for case where no file is present
     
-    CryptoG (); // Constructor for case where file is present
+    CryptoG(); // Constructor for case where file is present
 
     void encrypt_and_write_to_file();
 };
