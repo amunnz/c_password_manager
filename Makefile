@@ -1,6 +1,6 @@
 # when main.o changes, run the following command to produce "run", linking with our library
 run: main.o cryptog.o entry.o ui.o utils.o
-	g++ -g *.o -o run -lcryptopp
+	g++ -g *.o -o run -l:libcryptopp.a
 
 # when any .cpp or .h file change in our working directory, compile each individually.
 # "-c" compiles to object file.
