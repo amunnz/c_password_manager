@@ -63,13 +63,13 @@ void CryptoG::encrypt_and_write_to_file() {
 
     FileSink output_file("database", true);
     
-    ArraySource write_iv(   iv, 
-                            iv.size(), 
-                            true, 
-                            new Redirector(output_file)); // Stream the bytes held by iv into the file sink
+    ArraySource(iv, 
+                iv.size(), 
+                true, 
+                new Redirector(output_file)); // Stream the bytes held by iv into the file sink
     
-    ArraySource write_data( plaintext.data(),
-                            plaintext.size(), 
-                            true, 
-                            new StreamTransformationFilter(encryptor, new Redirector(output_file)));
+    ArraySource(plaintext.data(),
+                plaintext.size(), 
+                true, 
+                new StreamTransformationFilter(encryptor, new Redirector(output_file)));
 }
