@@ -1,7 +1,5 @@
 #include "entry.h"
 
-class Entry {
-    std::string title;
-    std::string username;
-    std::string password;
-};
+void Entry::print_single_entry() {
+    std::cout << title << " " << username << " " << password << std::endl;
+}
