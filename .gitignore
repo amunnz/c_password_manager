@@ -2,6 +2,7 @@ main.o
 utils.o
 cryptog.o
 entry.o
+ui.o
 run
 .vscode
 Makefile~
