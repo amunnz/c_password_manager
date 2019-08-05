@@ -18,17 +18,14 @@ SecByteBlock CryptoG::generate_secure_key() {
     // 31st is ignored.
     std::cin.getline((char*)key_buffer, AES::MAX_KEYLENGTH); 
     
-    // The key has the correct length and can be initialised
-    SecByteBlock key(key_buffer, AES::MAX_KEYLENGTH);
-    return key;
+    return SecByteBlock(key_buffer, AES::MAX_KEYLENGTH);
 }   
 
 // Constructor for case where no file is present
 CryptoG::CryptoG (const std::string& str, const size_t length)
     : key(generate_secure_key()),
-      iv(CryptoG::generate_initialisation_vector()),
+      iv(generate_initialisation_vector()),
       plaintext(SecByteBlock((byte*)str.data(), length)) {}
-
 
 // Constructor for case where file is present
 CryptoG::CryptoG () : key(generate_secure_key()) {
