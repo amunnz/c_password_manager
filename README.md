@@ -56,7 +56,7 @@ To open the command palette, hit:
 You can change the theme, git push, etc. with the palette.
 
 #### Opening workspace from terminal
-Navigate to ProjectMunro and then use:
+Navigate to c_password_manager and then use:
 ```
 	code .
 ```
