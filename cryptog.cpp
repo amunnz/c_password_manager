@@ -20,10 +20,11 @@ SecByteBlock CryptoG::generate_secure_key() {
 }   
 
 // Constructor for case where no file is present
-CryptoG::CryptoG (byte* str) {
+CryptoG::CryptoG (const std::string& str, const size_t length) {
     iv = CryptoG::generate_initialisation_vector();
     key = CryptoG::generate_secure_key();
-    plaintext = SecByteBlock(str, 63);
+    plaintext = SecByteBlock((byte*)str.data(), length);
+    print_byte_array_as_decimal((byte*)str.data(), length);
 }
 
 // Constructor for case where file is present
