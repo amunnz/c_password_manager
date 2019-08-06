@@ -9,7 +9,7 @@ class Entry {
     std::string username;
     std::string password;
 
-    void print_single_entry();
+    void print_single_entry() const;
 };
 
 #endif
