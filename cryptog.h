@@ -29,21 +29,4 @@ class CryptoG {
     void encrypt_and_write_to_file() const;
 };
 
-class UniqCrypt
-{
-    public:
-        static UniqCrypt& getInstance()
-        {
-            static UniqCrypt    instance; // Guaranteed to be destroyed.
-                                  // Instantiated on first use.
-            return instance;
-        }
-    private:
-        UniqCrypt() {} // Constructor
-
-    public:
-        UniqCrypt(UniqCrypt const&)       = delete; // Delete the copy constructor
-        void operator=(UniqCrypt const&)  = delete; // Delete the = operator
-};
-
 #endif
