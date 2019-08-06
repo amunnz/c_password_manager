@@ -57,7 +57,7 @@ void CryptoG::read_and_decrypt_file() {
     std::cout << "The decrypted file data reads:" << std::endl << plaintext.data() << std::endl;
 }
 
-void CryptoG::encrypt_and_write_to_file() {
+void CryptoG::encrypt_and_write_to_file() const {
 
     CFB_Mode<AES>::Encryption encryptor(key, key.size(), iv);
 
