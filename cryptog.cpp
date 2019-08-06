@@ -71,7 +71,7 @@ void CryptoG::encrypt_and_write_to_file() const {
                 true, 
                 new Redirector(output_file));
     
-    ArraySource(plaintext.data(),
+    ArraySource(plaintext,
                 plaintext.size(), 
                 true, 
                 new StreamTransformationFilter(encryptor, new Redirector(output_file)));
