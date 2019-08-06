@@ -31,7 +31,13 @@ CryptoG::CryptoG (const std::string& str, const size_t length)
 CryptoG::CryptoG () : key(generate_secure_key()) {
     read_and_decrypt_file();
 }
-
+// TODO:
+// Split this function up.
+// In main, allocate a FileSource pointer
+// Pass the pointer to the constructor
+// Create two functions, which will return iv & plaintext respectively
+// Use these two functions in the initialiser list of the above constructor
+// to allow us to make them const.
 void CryptoG::read_and_decrypt_file() {
     FileSource fs("database", false /* Do not pump all bytes immediately*/);
 
