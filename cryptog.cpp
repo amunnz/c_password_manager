@@ -1,14 +1,21 @@
 #include "cryptog.h"
 
-SecByteBlock CryptoG::generate_initialisation_vector() {
-    AutoSeededRandomPool rnd;
+// Constructor for case where no file is present
+CryptoG::CryptoG (const std::string& str, const size_t length)
+    : key(generate_secure_key()),
+      iv(generate_initialisation_vector()),
+      plaintext(SecByteBlock((byte*)str.data(), length)) {}
 
-    SecByteBlock iv(AES::BLOCKSIZE);
-    rnd.GenerateBlock(iv, iv.size());
-    return iv;
+// Constructor for case where file is present
+CryptoG::CryptoG(FileSource& fs)
+    : key(generate_secure_key()),
+      iv(read_iv_from_file(fs)),
+      plaintext(read_and_decrypt_database_from_file(fs)) {
+
+    std::cout << "The decrypted file data reads:" << std::endl << plaintext.data() << std::endl;
 }
 
-SecByteBlock CryptoG::generate_secure_key() {
+SecByteBlock CryptoG::generate_secure_key() const {
     
     byte key_buffer[AES::MAX_KEYLENGTH] = { 0 };
     std::cout << "Please enter your master password: ";
@@ -21,26 +28,24 @@ SecByteBlock CryptoG::generate_secure_key() {
     return SecByteBlock(key_buffer, AES::MAX_KEYLENGTH);
 }   
 
-// Constructor for case where no file is present
-CryptoG::CryptoG (const std::string& str, const size_t length)
-    : key(generate_secure_key()),
-      iv(generate_initialisation_vector()),
-      plaintext(SecByteBlock((byte*)str.data(), length)) {}
+SecByteBlock CryptoG::generate_initialisation_vector() const {
+    AutoSeededRandomPool rnd;
+    SecByteBlock iv_buf(AES::BLOCKSIZE);
+    rnd.GenerateBlock(iv_buf, iv_buf.size());
 
-// Constructor for case where file is present
-CryptoG::CryptoG () : key(generate_secure_key()) {
-    read_and_decrypt_file();
+    return iv_buf;
 }
 
-void CryptoG::read_and_decrypt_file() {
-    FileSource fs("database", false /* Do not pump all bytes immediately*/);
-
+SecByteBlock CryptoG::read_iv_from_file(FileSource& fs) const {
     SecByteBlock iv_buf(AES::BLOCKSIZE); // Set up a buffer to store the IV read from file
     ArraySink as(iv_buf, iv_buf.size()); // An ArraySink will handle writing data to iv_buf
     fs.Attach(new Redirector(as));       // Attaches the file object to our ArraySink
     fs.Pump(AES::BLOCKSIZE);             // Extract the first 16 bytes for the IV
-    iv = iv_buf;                         // Set iv
-    
+
+    return iv_buf;
+}
+
+SecByteBlock CryptoG::read_and_decrypt_database_from_file(FileSource& fs) const {
     CFB_Mode<AES>::Decryption decryptor(key, key.size(), iv);
     ByteQueue queue;
     
@@ -52,8 +57,7 @@ void CryptoG::read_and_decrypt_file() {
     ArraySink sink(data_buf, data_buf.size());
     int bytes_transferred = queue.TransferTo(sink);
 
-    plaintext = SecByteBlock(data_buf, bytes_transferred); // Set plaintext
-    std::cout << "The decrypted file data reads:" << std::endl << plaintext.data() << std::endl;
+    return SecByteBlock(data_buf, bytes_transferred);
 }
 
 void CryptoG::encrypt_and_write_to_file() const {

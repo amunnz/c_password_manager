@@ -16,15 +16,16 @@ class CryptoG {
     SecByteBlock iv;
     SecByteBlock plaintext;
 
-    SecByteBlock generate_initialisation_vector();
-    SecByteBlock generate_secure_key();
+    SecByteBlock generate_secure_key() const;
+    SecByteBlock generate_initialisation_vector() const;
 
-    void read_and_decrypt_file();
+    SecByteBlock read_iv_from_file(FileSource& fs) const;
+    SecByteBlock read_and_decrypt_database_from_file(FileSource& fs) const;
     
     public:
     
     CryptoG(const std::string& str, const size_t length); // Constructor for case where no file is present
-    CryptoG(); // Constructor for case where file is present
+    CryptoG(FileSource& fs); // Constructor for case where file is present
 
     void encrypt_and_write_to_file() const;
 };
