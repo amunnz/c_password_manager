@@ -9,8 +9,7 @@
 #include "utils.h"
 
 using namespace CryptoPP;
-// iv is formed by either 1) generating randomly or 2) reading from end of file
-// key is formed by user input of a string
+
 class CryptoG {
     private:
     const SecByteBlock key;
