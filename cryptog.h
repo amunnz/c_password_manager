@@ -27,7 +27,24 @@ class CryptoG {
     CryptoG(const std::string& str, const size_t length); // Constructor for case where no file is present
     CryptoG(); // Constructor for case where file is present
 
-    void encrypt_and_write_to_file();
+    void encrypt_and_write_to_file() const;
+};
+
+class S
+{
+    public:
+        static S& getInstance()
+        {
+            static S    instance; // Guaranteed to be destroyed.
+                                  // Instantiated on first use.
+            return instance;
+        }
+    private:
+        S() {} // Constructor
+
+    public:
+        S(S const&)               = delete; // Delete the copy constructor
+        void operator=(S const&)  = delete; // Delete the = operator
 };
 
 #endif
