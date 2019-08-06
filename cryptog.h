@@ -27,6 +27,9 @@ class CryptoG {
     CryptoG(FileSource& fs); // Constructor for case where file is present
 
     void encrypt_and_write_to_file() const;
+
+    CryptoG(CryptoG const&)         = delete; // Delete the copy constructor
+    void operator=(CryptoG const&)  = delete; // Delete the = operator
 };
 
 #endif
