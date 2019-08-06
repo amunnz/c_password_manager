@@ -3,8 +3,16 @@
 
 int main(int argc, char** argv) {
 
-    // Point to null if no file argument, otherwise allocate a new CryptoG object.
-    CryptoG* cryptographic_data = (argc == 1) ? nullptr : new CryptoG();
+    CryptoG* cryptographic_data = nullptr;
+
+    if (argc == 2) { // File argument present.
+        
+        // Create file object
+        FileSource fs("database", false /* Do not pump all bytes immediately*/);
+
+        // Create new CryptoG object on the heap, reading and decrypting file data.
+        cryptographic_data = new CryptoG(fs);
+    }
 
     // Do database stuff...
     UI::print_home_screen();
