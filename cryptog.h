@@ -29,21 +29,21 @@ class CryptoG {
     void encrypt_and_write_to_file() const;
 };
 
-class S
+class UniqCrypt
 {
     public:
-        static S& getInstance()
+        static UniqCrypt& getInstance()
         {
-            static S    instance; // Guaranteed to be destroyed.
+            static UniqCrypt    instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }
     private:
-        S() {} // Constructor
+        UniqCrypt() {} // Constructor
 
     public:
-        S(S const&)               = delete; // Delete the copy constructor
-        void operator=(S const&)  = delete; // Delete the = operator
+        UniqCrypt(UniqCrypt const&)       = delete; // Delete the copy constructor
+        void operator=(UniqCrypt const&)  = delete; // Delete the = operator
 };
 
 #endif
