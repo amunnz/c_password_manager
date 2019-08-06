@@ -13,12 +13,11 @@ using namespace CryptoPP;
 class CryptoG {
     private:
     const SecByteBlock key;
-    SecByteBlock iv;
-    SecByteBlock plaintext;
+    const SecByteBlock iv;
+    const SecByteBlock plaintext;
 
     SecByteBlock generate_secure_key() const;
     SecByteBlock generate_initialisation_vector() const;
-
     SecByteBlock read_iv_from_file(FileSource& fs) const;
     SecByteBlock read_and_decrypt_database_from_file(FileSource& fs) const;
     
