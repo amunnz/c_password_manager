@@ -14,41 +14,37 @@ int main(int argc, char** argv) {
         cryptographic_data = new CryptoG(fs);
     }
 
-    // Do database stuff...
-    UI::print_home_screen();
-    
-    
-
     const std::string message = "Title,Username,Password\nFacebook,email@address.com,myfbpassword";
 
-    while(true) {
-        int index_choice = UI::get_user_input();
-        switch (index_choice) {
-            case 1: { // Print all
-                std::cout << "To be implemented" << std::endl;
+    bool continue_running = true;
+    while(continue_running) {
+        UI::print_home_screen();
+        switch (UI::get_user_action_choice()) {
+            case UI::PRINT_ALL: {
+                
             }
-            case 2: { // Print single
-                std::cout << "To be implemented" << std::endl;
+            case UI::PRINT_SINGLE: {
+                
             }
-            case 3: { // Add entry
+            case UI::ADD: {
 
             }
-            case 4: { // Delete entry
+            case UI::DELETE: {
 
             }
-            case 5: { // Edit entry
+            case UI::EDIT: {
 
             }
-            case 6: { // Save and exit
+            case UI::SAVE_AND_EXIT: {
                 if (!cryptographic_data) {
                     cryptographic_data = new CryptoG(message, message.length());
                 }
                 cryptographic_data->encrypt_and_write_to_file();
                 delete cryptographic_data;
-                break;
+                continue_running = false;
             }
-            case 7: { // Discard and exit
-                break;
+            case UI::DISCARD_AND_EXIT: {
+                continue_running = false;
             }
         }
     }
