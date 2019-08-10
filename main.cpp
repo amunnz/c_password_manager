@@ -16,14 +16,42 @@ int main(int argc, char** argv) {
 
     // Do database stuff...
     UI::print_home_screen();
+    
+    
+
     const std::string message = "Title,Username,Password\nFacebook,email@address.com,myfbpassword";
 
-    // This is the code for case 6, save to file and close
-    if (!cryptographic_data) {
-        cryptographic_data = new CryptoG(message, message.length());
+    while(true) {
+        int index_choice = UI::get_user_input();
+        switch (index_choice) {
+            case 1: { // Print all
+                std::cout << "To be implemented" << std::endl;
+            }
+            case 2: { // Print single
+                std::cout << "To be implemented" << std::endl;
+            }
+            case 3: { // Add entry
+
+            }
+            case 4: { // Delete entry
+
+            }
+            case 5: { // Edit entry
+
+            }
+            case 6: { // Save and exit
+                if (!cryptographic_data) {
+                    cryptographic_data = new CryptoG(message, message.length());
+                }
+                cryptographic_data->encrypt_and_write_to_file();
+                delete cryptographic_data;
+                break;
+            }
+            case 7: { // Discard and exit
+                break;
+            }
+        }
     }
-    cryptographic_data->encrypt_and_write_to_file();
-    delete cryptographic_data;
 
     return 0;
 }
