@@ -5,6 +5,7 @@
 #include <iostream>
 
 class Entry {
+private:
     std::string title;
     std::string username;
     std::string password;
