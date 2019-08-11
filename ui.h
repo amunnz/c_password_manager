@@ -13,6 +13,7 @@ public:
     };
     static void print_home_screen();
     static UserChoice get_user_action_choice();
+    static void fill_string_from_user_input(std::string& str);
 };
 
 #endif
