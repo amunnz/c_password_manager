@@ -16,11 +16,16 @@ void UI::print_home_screen() {
 bool UI::is_number(const std::string& s) {
 
     /* find_if
-    this is c++11 code
-    returns an iterator to the first element where the predicate returns true
-    the predicate is the third argument, a lambda function aka anonymous function
-    the form of a lambda in c++ is: [capture](parameters) -> return_type { function_body }
-    here the return type is implied as boolean*/
+    This is c++11 code
+    find_if returns an iterator to the first element where the predicate returns true.
+    The predicate is the third argument, a lambda function aka anonymous function
+    The form of a lambda in c++ is:
+    [capture](parameters) -> return_type { function_body }
+    here the return type is implied as boolean
+    The lambda is applied starting at the element at s.begin() moving forward until it returns
+    true or it reaches s.end(). It then returns a pointer to that element, which is compared to s.end().
+    i.e. return true if the string is not empty and no non-integer digits were found.
+    */
     return !s.empty() && std::find_if(s.begin(),
                                       s.end(),
                                       [](char c) { return !std::isdigit(c); }
@@ -32,8 +37,7 @@ UI::UserChoice UI::get_user_action_choice() {
     std::string user_input_string;
     std::getline(std::cin, user_input_string);
 
-    UserChoice choice = LAST_ITEM; // Initialise to an error
-    int user_input_int;
+    int user_input_int = LAST_ITEM; // Initialise to an error
 
     // Check that the input is an integer
     if (!is_number(user_input_string)) {
@@ -45,21 +49,21 @@ UI::UserChoice UI::get_user_action_choice() {
 
     // Check that the integer falls within the index range
     if (user_input_int < 0 || user_input_int >= LAST_ITEM)
-        std::cout << "Please enter an integer between " << 0 << " and " << LAST_ITEM << std::endl;
+        std::cout << "Please enter an integer between " << 0 << " and " << LAST_ITEM - 1 << std::endl;
     else if (user_input_int == PRINT_ALL)
-        choice = PRINT_ALL;
+        return PRINT_ALL;
     else if (user_input_int == PRINT_SINGLE)
-        choice = PRINT_SINGLE;
+        return PRINT_SINGLE;
     else if (user_input_int == ADD)
-        choice = ADD;
+        return ADD;
     else if (user_input_int == DELETE)
-        choice = DELETE;
+        return DELETE;
     else if (user_input_int == EDIT)
-        choice = EDIT;
+        return EDIT;
     else if (user_input_int == SAVE_AND_EXIT)
-        choice = SAVE_AND_EXIT;
+        return SAVE_AND_EXIT;
     else if (user_input_int == DISCARD_AND_EXIT)
-        choice = DISCARD_AND_EXIT;
+        return DISCARD_AND_EXIT;
 
-    return choice;
+    return LAST_ITEM;
 }
