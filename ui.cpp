@@ -70,6 +70,7 @@ UI::UserChoice UI::get_user_action_choice() {
 
 void UI::fill_string_from_user_input(std::string& str) {
 
-    std::getline(std::cin, str);
-    
+    if (!std::getline(std::cin, str)) {
+        std::cerr << "Unknown error retrieving user input." << std::endl;
+    }
 }
