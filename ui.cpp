@@ -67,3 +67,9 @@ UI::UserChoice UI::get_user_action_choice() {
 
     return LAST_ITEM;
 }
+
+void UI::fill_string_from_user_input(std::string& str) {
+
+    std::getline(std::cin, str);
+    
+}
