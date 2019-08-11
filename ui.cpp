@@ -26,22 +26,25 @@ UI::UserChoice UI::get_user_action_choice() {
     // Upon failure respond to the user why the input was incorrect
     // and then prompt user to input again.
 
-    unsigned char user_input = 5;
+    int user_input = 5;
+    UI::UserChoice choice = UI::LAST_ITEM; // Initialise to an error
 
     if (user_input < 0 || user_input >= UI::LAST_ITEM)
         std::cout << "Value outside range" << std::endl;
     else if (user_input == UI::PRINT_ALL)
-        return UI::PRINT_ALL;
+        choice = UI::PRINT_ALL;
     else if (user_input == UI::PRINT_SINGLE)
-        return UI::PRINT_SINGLE;
+        choice = UI::PRINT_SINGLE;
     else if (user_input == UI::ADD)
-        return UI::ADD;
+        choice = UI::ADD;
     else if (user_input == UI::DELETE)
-        return UI::DELETE;
+        choice = UI::DELETE;
     else if (user_input == UI::EDIT)
-        return UI::EDIT;
+        choice = UI::EDIT;
     else if (user_input == UI::SAVE_AND_EXIT)
-       return UI::SAVE_AND_EXIT;
+       choice = UI::SAVE_AND_EXIT;
     else if (user_input == UI::DISCARD_AND_EXIT)
-       return UI::DISCARD_AND_EXIT;
+       choice = UI::DISCARD_AND_EXIT;
+
+    return choice;
 }
