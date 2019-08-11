@@ -11,6 +11,10 @@ private:
     std::string password;
 
     void print_single_entry() const;
+
+public:
+    Entry(std::string& t, std::string& u, std::string& p);
+
 };
 
 #endif
