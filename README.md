@@ -67,6 +67,6 @@ files individually.
 Configure gdb to debug, make is already configured with -g flag.
 
 ```
-launch.json
+	launch.json
 ```
 contains debugger configurations.
