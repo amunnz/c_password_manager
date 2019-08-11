@@ -49,7 +49,8 @@ int main(int argc, char** argv) {
                 break;
         
             case UI::LAST_ITEM:
-                std::cerr << "Error parsing user input to integer." << std::endl;
+                std::cerr << "Error parsing user input to integer. Try again" << std::endl;
+                break;
         }
     }
 
