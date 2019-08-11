@@ -20,32 +20,36 @@ int main(int argc, char** argv) {
     while(continue_running) {
         UI::print_home_screen();
         switch (UI::get_user_action_choice()) {
-            case UI::PRINT_ALL: {
-                
-            }
-            case UI::PRINT_SINGLE: {
-                
-            }
-            case UI::ADD: {
+            case UI::PRINT_ALL:
+                break;
 
-            }
-            case UI::DELETE: {
+            case UI::PRINT_SINGLE:
+                break;
 
-            }
-            case UI::EDIT: {
+            case UI::ADD:
+                break;
 
-            }
-            case UI::SAVE_AND_EXIT: {
+            case UI::DELETE:
+                break;
+
+            case UI::EDIT:
+                break;
+
+            case UI::SAVE_AND_EXIT:
                 if (!cryptographic_data) {
                     cryptographic_data = new CryptoG(message, message.length());
                 }
                 cryptographic_data->encrypt_and_write_to_file();
                 delete cryptographic_data;
                 continue_running = false;
-            }
-            case UI::DISCARD_AND_EXIT: {
+                break;
+            
+            case UI::DISCARD_AND_EXIT:
                 continue_running = false;
-            }
+                break;
+        
+            case UI::LAST_ITEM:
+                std::cerr << "Error parsing user input to integer." << std::endl;
         }
     }
 
