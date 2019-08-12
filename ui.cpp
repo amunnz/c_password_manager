@@ -26,7 +26,7 @@ bool UI::is_number(const std::string& str) {
     true or it reaches s.end(). It then returns a pointer to that element, which is compared to s.end().
     i.e. return true if the string is not empty and no non-integer digits were found.
     */
-    return !s.empty() && std::find_if(str.begin(),
+    return !str.empty() && std::find_if(str.begin(),
                                       str.end(),
                                       [](char c) { return !std::isdigit(c); }
                                       ) == str.end();
