@@ -13,7 +13,7 @@ void UI::print_home_screen() {
     std::cout << "6) Discard changes and close" << std::endl;
 }
 
-bool UI::is_number(const std::string& s) {
+bool UI::is_number(const std::string& str) {
 
     /* find_if
     This is c++11 code
@@ -26,10 +26,10 @@ bool UI::is_number(const std::string& s) {
     true or it reaches s.end(). It then returns a pointer to that element, which is compared to s.end().
     i.e. return true if the string is not empty and no non-integer digits were found.
     */
-    return !s.empty() && std::find_if(s.begin(),
-                                      s.end(),
+    return !s.empty() && std::find_if(str.begin(),
+                                      str.end(),
                                       [](char c) { return !std::isdigit(c); }
-                                      ) == s.end();
+                                      ) == str.end();
 }
 
 UI::UserChoice UI::get_user_action_choice() {
