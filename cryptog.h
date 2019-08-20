@@ -11,7 +11,7 @@
 using namespace CryptoPP;
 
 class CryptoG {
-    private:
+private:
     const SecByteBlock key;
     const SecByteBlock iv;
     const SecByteBlock plaintext;
@@ -21,12 +21,15 @@ class CryptoG {
     SecByteBlock read_iv_from_file(FileSource& fs) const;
     SecByteBlock read_and_decrypt_database_from_file(FileSource& fs) const;
     
-    public:
+public:
     
     CryptoG(const std::string& str, const size_t length); // Constructor for case where no file is present
     CryptoG(FileSource& fs); // Constructor for case where file is present
 
     void encrypt_and_write_to_file() const;
+
+    CryptoG(CryptoG const&)         = delete; // Delete the copy constructor
+    void operator=(CryptoG const&)  = delete; // Delete the = operator
 };
 
 #endif

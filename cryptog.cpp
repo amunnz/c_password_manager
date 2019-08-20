@@ -1,10 +1,10 @@
 #include "cryptog.h"
 
 // Constructor for case where no file is present
-CryptoG::CryptoG (const std::string& str, const size_t length)
+CryptoG::CryptoG (const std::string& message, const size_t length)
     : key(generate_secure_key()),
       iv(generate_initialisation_vector()),
-      plaintext(SecByteBlock((byte*)str.data(), length)) {}
+      plaintext(SecByteBlock((byte*)message.data(), length)) {}
 
 // Constructor for case where file is present
 CryptoG::CryptoG(FileSource& fs)

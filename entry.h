@@ -5,13 +5,17 @@
 #include <iostream>
 
 class Entry {
+private:
     std::string title;
     std::string username;
     std::string password;
 
     void print_single_entry() const;
-    void add_entry() const;
-    
+
+
+public:
+    Entry(std::string& t, std::string& u, std::string& p);
+
 };
 
 #endif
