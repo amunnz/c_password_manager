@@ -10,6 +10,8 @@ class Entry {
     std::string password;
 
     void print_single_entry() const;
+    void add_entry() const;
+    
 };
 
 #endif

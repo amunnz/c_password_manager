@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
 
-    CryptoG* cryptographic_data = nullptr;
+   CryptoG* cryptographic_data = nullptr;
 
     if (argc == 2) { // File argument present.
         
