@@ -1,5 +1,7 @@
 #include "cryptog.h"
 #include "ui.h"
+#include "entry.h"
+#include "database.h"
 
 int main(int argc, char** argv) {
 
@@ -15,6 +17,45 @@ int main(int argc, char** argv) {
     }
 
     const std::string message = "Title,Username,Password\nFacebook,email@address.com,myfbpassword";
+    //*******************TEST CODE***************************************
+    std::string testString = "Facebook,email@address.com,myfbpassword\nMoosebook,moosemail@address.com,myMoosebookpassword\nCatbook,catemail@address.com,myCatBookPassword";
+    std::cout << "Using a test string: \n" << testString << std::endl;
+
+    //Check Entry class
+    std::cout << "+++++++++++++Checking entry class+++++++++++++" << std::endl;
+    std::string s1="Entrybook";
+    std::string s2="Entry@address.com";
+    std::string s3="myEntrypassword";
+    Entry testEntry(s1,s2,s3);
+    testEntry.print_single_entry();
+    std::cout << "+++++++++Done Checking entry class+++++++++++++" << std::endl;
+
+    std::cout << "+++++++++++++Checking database class+++++++++++++" << std::endl;
+    std::cout << "Checking entry constructor..." << std::endl;
+    //build a database using entry 
+    Database testDB(testEntry);
+    testDB.database_size();
+
+    std::cout << "Checking add entry function..." << std::endl;
+    testDB.add_entry(testEntry);
+    testDB.database_size();
+    
+
+    std::cout << "Checking string constructor..." << std::endl;
+    //build a database using a string constructor
+    Database testDB2(testString);
+    testDB2.database_size();
+    std::cout << "Checking print entry titles function..." << std::endl;
+    testDB2.print_entry_titles();
+    std::cout << "Checking edit entry function..." << std::endl;
+    int c=1;
+    testDB2.edit_entry(c,testEntry);
+    testDB2.print_entry_titles();
+    std::cout << "Checking delete entry function..." << std::endl;
+    testDB2.delete_entry(c);
+    testDB2.print_entry_titles();
+    std::cout << "+++++++++Done Checking database class+++++++++++++" << std::endl;
+
 
     bool continue_running = true;
     while(continue_running) {

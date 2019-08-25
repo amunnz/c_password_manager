@@ -10,7 +10,7 @@ library_name = -lcryptopp
 endif
 
 # Variables
-objects = main.o cryptog.o entry.o ui.o utils.o
+objects = main.o cryptog.o entry.o ui.o utils.o database.o
 cpp_standard = -std=c++11
 warning_flags = -Wall
 options = $(cpp_standard) $(warning_flags) -g -c
@@ -29,6 +29,9 @@ cryptog.o: cryptog.cpp cryptog.h
 
 entry.o: entry.cpp entry.h
 	g++ $(options) entry.cpp
+
+database.o: database.cpp database.h
+	g++ $(options) database.cpp
 
 ui.o: ui.cpp ui.h
 	g++ $(options) ui.cpp
