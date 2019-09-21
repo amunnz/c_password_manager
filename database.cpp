@@ -45,6 +45,20 @@ std::vector<std::string> Database::delimitString(std::string& s,std::string& del
 	return delimitedString;
 }
 
+std::string Database::serialiseDataBase(void) {
+	std::cout << "hello world" << std::endl;
+	std::string limitedString;
+	//COnvert an entry into a string
+	//entry_to_string()
+	for( std::size_t i=0; i<Entries.size(); i++) {
+		std::cout << Entries[i].entry_to_string() << std::endl;
+		limitedString.append(Entries[i].entry_to_string()+"\n");
+	}
+	std::cout << "WORKING?" << std::endl;
+	std::cout << limitedString << std::endl;
+	return limitedString;
+}
+
 
 Database::Database(std::string& s) {
 	//sanity print the input string
@@ -66,7 +80,6 @@ Database::Database(std::string& s) {
 		Entry entry(s_entry[0],s_entry[1],s_entry[2]); //this might be a shit thing to do?
 		Entries.push_back(entry);
 	}
-
 }
 
 Database::Database(Entry& entry) {

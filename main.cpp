@@ -54,7 +54,12 @@ int main(int argc, char** argv) {
     std::cout << "Checking delete entry function..." << std::endl;
     testDB2.delete_entry(c);
     testDB2.print_entry_titles();
+    std::cout << "Checking serialise function..." << std::endl;
+    std::string limitedString=testDB2.serialiseDataBase();
+    std::cout << limitedString << std::endl;
     std::cout << "+++++++++Done Checking database class+++++++++++++" << std::endl;
+
+
 
 
     bool continue_running = true;

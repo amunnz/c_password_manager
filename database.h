@@ -28,6 +28,7 @@ public:
 	void print_entry_titles(void);
 	void delete_entry(int c);
 	void edit_entry(int c,Entry& entry);
+	std::string serialiseDataBase(void);
 	//std::vector<std::string> delimitString(std::string& s,std::string& delimiter);
 
 };

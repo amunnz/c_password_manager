@@ -17,6 +17,7 @@ public:
     Entry(std::string& t, std::string& u, std::string& p); //this is a constructor? COMMENT YOU DONGUS!
     void print_single_entry() const;
     void print_entry_title();
+    std::string entry_to_string();
 };
 
 #endif
